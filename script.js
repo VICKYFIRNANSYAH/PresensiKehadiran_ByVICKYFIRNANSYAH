@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Ganti URL ini dengan URL Apps Script kamu
-    fetch('https://script.google.com/macros/s/AKfycbyZ6rbDUaPjDQ3CYa7xj2gtpFmYzxsTwGYPIj_RWjdk3UJUmOdLH60tI4FOsUt5bvgrAg/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbzxoHnKYy49_UUGG9LDFIuUJ_I-3F2GipHquuuK5yB0aYpBM0Nh2gXhHiSihaH_6UiOFg/exec', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function loadData() {
     tableBody.innerHTML = '<tr><td colspan="4">Memuat data...</td></tr>';
-    fetch('https://script.google.com/macros/s/AKfycbyZ6rbDUaPjDQ3CYa7xj2gtpFmYzxsTwGYPIj_RWjdk3UJUmOdLH60tI4FOsUt5bvgrAg/exec?action=get')
+    fetch('https://script.google.com/macros/s/AKfycbzxoHnKYy49_UUGG9LDFIuUJ_I-3F2GipHquuuK5yB0aYpBM0Nh2gXhHiSihaH_6UiOFg/exec?action=get')
       .then(res => res.json())
       .then(data => {
         if(data.length === 0) {
