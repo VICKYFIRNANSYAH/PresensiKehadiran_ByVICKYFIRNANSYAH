@@ -6,9 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('form-presensi');
   const tableBody = document.querySelector('#table-data tbody');
 
-  // Fungsi pindah halaman dengan animasi glowing aktif pindah
   function switchPage(page) {
-    if(page === 'formulir') {
+    if (page === 'formulir') {
       sectionFormulir.style.display = 'block';
       sectionData.style.display = 'none';
       menuFormulir.classList.add('active');
@@ -25,19 +24,20 @@ document.addEventListener('DOMContentLoaded', () => {
   menuFormulir.addEventListener('click', () => switchPage('formulir'));
   menuData.addEventListener('click', () => switchPage('data'));
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const tanggal = document.getElementById('tanggal').value.trim();
     const bulan = document.getElementById('bulan').value.trim();
     const tahun = document.getElementById('tahun').value.trim();
     const nama = document.getElementById('nama').value.trim();
     const kehadiran = document.getElementById('kehadiran').value;
 
-    if(!tanggal || !bulan || !tahun || !nama || !kehadiran) {
+    if (!tanggal || !bulan || !tahun || !nama || !kehadiran) {
       alert('Semua kolom wajib diisi!');
       return;
     }
-    if(tanggal.length !== 2 || bulan.length !== 2 || tahun.length !== 4) {
+    if (tanggal.length !== 2 || bulan.length !== 2 || tahun.length !== 4) {
       alert('Format tanggal harus DD MM YYYY dengan angka lengkap!');
       return;
     }
@@ -51,55 +51,62 @@ document.addEventListener('DOMContentLoaded', () => {
       jam,
     };
 
-    // Ganti URL ini dengan URL Apps Script kamu
-    fetch('https://script.google.com/macros/s/AKfycbzxoHnKYy49_UUGG9LDFIuUJ_I-3F2GipHquuuK5yB0aYpBM0Nh2gXhHiSihaH_6UiOFg/exec', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
+    try {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbyZ6rbDUaPjDQ3CYa7xj2gtpFmYzxsTwGYPIj_RWjdk3UJUmOdLH60tI4FOsUt5bvgrAg/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    })
-    .then(res => res.json())
-    .then(res => {
-      if(res.success) {
+
+      const result = await response.json();
+
+      if (result.success) {
         alert('Data berhasil dikirim!');
         form.reset();
       } else {
-        alert('Gagal mengirim data!');
+        alert('Gagal mengirim data dari server');
       }
-    })
-    .catch(err => {
-      alert('Error mengirim data');
-      console.error(err);
-    });
+    } catch (error) {
+      alert('Error mengirim data. Cek console untuk detail.');
+      console.error('Fetch error:', error);
+    }
   });
 
-  function loadData() {
+  async function loadData() {
     tableBody.innerHTML = '<tr><td colspan="4">Memuat data...</td></tr>';
-    fetch('https://script.google.com/macros/s/AKfycbzxoHnKYy49_UUGG9LDFIuUJ_I-3F2GipHquuuK5yB0aYpBM0Nh2gXhHiSihaH_6UiOFg/exec?action=get')
-      .then(res => res.json())
-      .then(data => {
-        if(data.length === 0) {
-          tableBody.innerHTML = '<tr><td colspan="4">Belum ada data</td></tr>';
-          return;
-        }
-        tableBody.innerHTML = '';
-        data.forEach(row => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${row.tanggal}</td>
-            <td>${row.nama}</td>
-            <td>${row.kehadiran}</td>
-            <td>${row.jam}</td>
-          `;
-          tableBody.appendChild(tr);
-        });
-      })
-      .catch(() => {
-        tableBody.innerHTML = '<tr><td colspan="4">Gagal memuat data</td></tr>';
+
+    try {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbyZ6rbDUaPjDQ3CYa7xj2gtpFmYzxsTwGYPIj_RWjdk3UJUmOdLH60tI4FOsUt5bvgrAg/exec?action=get');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+
+      if (!data.length) {
+        tableBody.innerHTML = '<tr><td colspan="4">Belum ada data</td></tr>';
+        return;
+      }
+
+      tableBody.innerHTML = '';
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${row.tanggal}</td>
+          <td>${row.nama}</td>
+          <td>${row.kehadiran}</td>
+          <td>${row.jam}</td>
+        `;
+        tableBody.appendChild(tr);
       });
+    } catch (error) {
+      tableBody.innerHTML = '<tr><td colspan="4">Gagal memuat data</td></tr>';
+      console.error('Load data error:', error);
+    }
   }
 
-  // Tampilkan halaman Formulir sebagai default
   switchPage('formulir');
 });
