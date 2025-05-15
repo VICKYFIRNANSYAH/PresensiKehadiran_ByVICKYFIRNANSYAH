@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Presensi Kehadiran</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav>
+    <button id="menu-formulir" class="active">Formulir</button>
+    <button id="menu-data">Data</button>
+  </nav>
+
+  <main>
+    <section id="section-formulir">
+      <h1>Presensi Kehadiran</h1>
+      <form id="form-presensi">
+        <div class="tanggal-group">
+          <input type="text" id="tanggal" placeholder="DD" maxlength="2" />
+          <input type="text" id="bulan" placeholder="MM" maxlength="2" />
+          <input type="text" id="tahun" placeholder="YYYY" maxlength="4" />
+        </div>
+        <input type="text" id="nama" placeholder="Masukkan nama" />
+        <select id="kehadiran">
+          <option value="">-- Pilih Kehadiran --</option>
+          <option value="Izin">Izin</option>
+          <option value="Sakit">Sakit</option>
+          <option value="Hadir">Hadir</option>
+          <option value="Tanpa keterangan">Tanpa keterangan</option>
+        </select>
+        <button type="submit">Kirim</button>
+        <p class="author">© 2025 Dibuat oleh VICKYFIRNANSYAH</p>
+      </form>
+    </section>
+
+    <section id="section-data" style="display:none;">
+      <h2>Data Presensi</h2>
+      <table id="table-data">
+        <thead>
+          <tr><th>Tanggal</th><th>Nama</th><th>Kehadiran</th><th>Jam</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

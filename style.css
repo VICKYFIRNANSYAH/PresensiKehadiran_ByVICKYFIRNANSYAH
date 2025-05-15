@@ -1,0 +1,175 @@
+/* Reset dan dasar */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0e121a;
+  color: #b0c7ff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-y: scroll;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+  background: #222a44;
+  padding: 15px 30px;
+  box-shadow: 0 0 15px #1e2a50;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+nav button {
+  background: none;
+  border: none;
+  color: #8aa1d0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 8px 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+nav button.active {
+  color: #fff;
+  box-shadow: 0 0 12px #2c9e4e;
+  background: #2c9e4e;
+}
+
+/* Animasi glowing underline */
+nav button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #45d66f;
+  box-shadow: 0 0 8px #45d66f, 0 0 16px #45d66f;
+  border-radius: 4px;
+  animation: glowSlide 0.5s ease forwards;
+}
+
+@keyframes glowSlide {
+  0% {width: 0;}
+  100% {width: 100%;}
+}
+
+main {
+  flex: 1;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #121a2a;
+  border-radius: 12px;
+  box-shadow: 0 0 25px #2c9e4e;
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+}
+
+h1 {
+  color: #75a1f2;
+  font-size: 2rem;
+  text-align: center;
+  text-shadow: 0 0 12px #75a1f2;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #75a1f2;
+  text-shadow: 0 0 12px #75a1f2;
+  margin-bottom: 15px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.tanggal-group {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+input[type="text"], select, button {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  background: #1a223a;
+  color: #dce9ff;
+  box-shadow: 0 0 8px #1a223a inset;
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 12px #45d66f;
+}
+
+input::placeholder {
+  color: #6c7a9c;
+}
+
+button {
+  background: #2c9e4e;
+  box-shadow: 0 0 12px #45d66f;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background 0.3s ease;
+  text-align: center;
+}
+
+button:hover {
+  background: #3ab75b;
+}
+
+.author {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: -10px;
+  color: #7fd270;
+  text-shadow: 0 0 8px #7fd270;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  color: #d1e7ff;
+}
+
+th, td {
+  border: 1px solid #2a3a5a;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #25416c;
+}
+
+@media screen and (max-width: 640px) {
+  main {
+    margin: 10px;
+    max-width: 100%;
+    max-height: calc(100vh - 100px);
+  }
+  input[type="text"], select, button {
+    font-size: 0.9rem;
+  }
+  .tanggal-group {
+    gap: 5px;
+  }
+}
