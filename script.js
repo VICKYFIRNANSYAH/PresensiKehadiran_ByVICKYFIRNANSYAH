@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('form-presensi');
   const tableBody = document.querySelector('#table-data tbody');
 
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbxbzUNrZdYXgeCnop_wtvPbrVz1Z6qo7uaUHsw7wkEWA6JWGFo68E_tcAZ3QKAYdmhm_Q/exec';
+
   function switchPage(page) {
     if (page === 'formulir') {
       sectionFormulir.style.display = 'block';
@@ -26,71 +28,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const tanggal = document.getElementById('tanggal').value.trim();
-    const bulan = document.getElementById('bulan').value.trim();
-    const tahun = document.getElementById('tahun').value.trim();
-    const nama = document.getElementById('nama').value.trim();
+    const tanggal = document.getElementById('tanggal').value;
+    const bulan = document.getElementById('bulan').value;
+    const tahun = document.getElementById('tahun').value;
+    const nama = document.getElementById('nama').value;
     const kehadiran = document.getElementById('kehadiran').value;
+    const jam = new Date().toLocaleTimeString();
 
     if (!tanggal || !bulan || !tahun || !nama || !kehadiran) {
       alert('Semua kolom wajib diisi!');
       return;
     }
-    if (tanggal.length !== 2 || bulan.length !== 2 || tahun.length !== 4) {
-      alert('Format tanggal harus DD MM YYYY dengan angka lengkap!');
-      return;
-    }
-    const tgl = `${tanggal}/${bulan}/${tahun}`;
-    const jam = new Date().toLocaleTimeString();
 
     const data = {
-      tanggal: tgl,
+      tanggal: `${tanggal}/${bulan}/${tahun}`,
       nama,
       kehadiran,
-      jam,
+      jam
     };
 
     try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbyZ6rbDUaPjDQ3CYa7xj2gtpFmYzxsTwGYPIj_RWjdk3UJUmOdLH60tI4FOsUt5bvgrAg/exec', {
+      const res = await fetch(GAS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
+      const result = await res.json();
       if (result.success) {
         alert('Data berhasil dikirim!');
         form.reset();
       } else {
-        alert('Gagal mengirim data dari server');
+        alert('Gagal mengirim data.');
       }
-    } catch (error) {
-      alert('Error mengirim data. Cek console untuk detail.');
-      console.error('Fetch error:', error);
+    } catch (err) {
+      console.error(err);
+      alert('Terjadi kesalahan saat mengirim data.');
     }
   });
 
   async function loadData() {
-    tableBody.innerHTML = '<tr><td colspan="4">Memuat data...</td></tr>';
-
+    tableBody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
     try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbyZ6rbDUaPjDQ3CYa7xj2gtpFmYzxsTwGYPIj_RWjdk3UJUmOdLH60tI4FOsUt5bvgrAg/exec?action=get');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-
-      if (!data.length) {
-        tableBody.innerHTML = '<tr><td colspan="4">Belum ada data</td></tr>';
-        return;
-      }
-
+      const res = await fetch(GAS_URL);
+      const data = await res.json();
       tableBody.innerHTML = '';
       data.forEach(row => {
         const tr = document.createElement('tr');
@@ -102,9 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         tableBody.appendChild(tr);
       });
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       tableBody.innerHTML = '<tr><td colspan="4">Gagal memuat data</td></tr>';
-      console.error('Load data error:', error);
     }
   }
 
