@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('form-presensi');
   const tableBody = document.querySelector('#table-data tbody');
 
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbyQH7JvKatV6JnRjnIQeeF6P8ohCbZRkrTwQ3pkL3sx_r7Rll3xoV_9zeQlK4BmSg6tcA/exec';
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbykpbu1-ngpVTmsLX9rZZO8zSsvNJmRSy2DTccP-THDo22XTFn3um2PDKLIv5JrvIInGQ/exec';
 
   function switchPage(page) {
     if (page === 'formulir') {
